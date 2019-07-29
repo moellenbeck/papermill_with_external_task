@@ -1,4 +1,4 @@
-# # Wir kann man die ProcessEngine+ExternalTask mit Jupyter-Notebooks verbinden
+# Wir kann man die ProcessEngine+ExternalTask mit Jupyter-Notebooks verbinden
 Jupyter-Notebooks sind eine gute Möglichkeit Quellcode mit Dokumentation zu verbinden und direkt ausführen. Dabei können auch Grafiken, die durch den Quellcode generiert werden, in die Ausgabe bzw. das Notebook eingebettet werden.
 
 ## Installation
