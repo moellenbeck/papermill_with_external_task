@@ -14,22 +14,26 @@ from external_task_api_client.external_task_finished import ExternalTaskFinished
 from external_task_api_client.external_task_bpmn_error import ExternalTaskBpmnError
 
 async def _handle_work(task):
-    print(json.dumps(task, sort_keys=True, indent=2))
+    try:
+        print(json.dumps(task, sort_keys=True, indent=2))
 
-    input_filename = 'input_papermill.ipynb'
-    output_filename = 'output_papermill.ipynb'
+        input_filename = 'input_papermill.ipynb'
+        output_filename = 'output_papermill.ipynb'
 
-    hello_param = task['payload']['a key']
+        hello_param = task['payload']['a key']
 
-    pm.execute_notebook(
-        input_filename,
-        output_filename,
-        parameters=dict(hello=hello_param)
-    )
+        pm.execute_notebook(
+            input_filename,
+            output_filename,
+            parameters=dict(hello=hello_param)
+        )
 
-    task_result = {"output_filename": output_filename}
+        task_result = {"output_filename": output_filename}
 
-    return ExternalTaskFinished(task["id"], task_result)
+        return ExternalTaskFinished(task["id"], task_result)
+    except Exception as e:
+        print('Raised a exception: ', e)
+        return ExternalTaskBpmnError(task["id"], "error_message", {'hello': 'world'})
 
 @asyncio.coroutine
 def _start_worker(worker):
