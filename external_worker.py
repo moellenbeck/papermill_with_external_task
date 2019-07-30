@@ -35,28 +35,38 @@ async def _handle_work(task):
         print('Raised a exception: ', e)
         return ExternalTaskBpmnError(task["id"], "error_message", {'hello': 'world'})
 
+
 @asyncio.coroutine
-def _start_worker(worker):
+def _start_worker(worker, identity, topic, handle_action):
     return worker.wait_for_handle(
-        identity={"token": "ZHVtbXlfdG9rZW4="},
-        topic="PapermillTopic",
+        identity=identity,
+        topic=topic,
         max_tasks=10,
         long_polling_timeout=10_000,
-        handle_action=_handle_work
+        handle_action=handle_action
     )
 
-def main():
+def handle_external_task(process_engine_url, identity, topic, worker_func):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(None)
 
-    process_engine_location = sys.argv[1] if len(sys.argv) == 2 else 'http://localhost:8000'
-
-    print('Using ProcessEngine at "{}"'.format(process_engine_location))
-    external_task_client = ExternalTaskApiClientService(process_engine_location)
+    print('Using ProcessEngine at "{}"'.format(process_engine_url))
+    external_task_client = ExternalTaskApiClientService(process_engine_url)
 
     worker = ExternalTaskWorker(external_task_client)
 
-    loop.run_until_complete(_start_worker(worker))
+    loop_runner = _start_worker(worker, identity, topic, worker_func)
 
+    loop.run_until_complete(loop_runner)
+
+def main():
+
+    process_engine_location = sys.argv[1] if len(sys.argv) == 2 else 'http://localhost:8000'
+
+    identity = {"token": "ZHVtbXlfdG9rZW4="}
+
+    topic = 'PapermillTopic'
+
+    handle_external_task(process_engine_location, identity, topic, _handle_work)
 
 main()

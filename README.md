@@ -15,6 +15,12 @@ Jupyter-Notebooks sind eine gute Möglichkeit Quellcode mit Dokumentation zu ver
 * Solution für diesen Ordner öffnen
 * Prozess *sample_papermill.bpmn* auf die lokale Process-Engine veröffentlichen
 
+### Optional: Anpassen von Jupyter-Notebook
+
+Durch die Verwendung von  [https://github.com/mwouts/jupytext](https://github.com/mwouts/jupytext)  kann die Versionsverwaltung von Jupyter-Notebook deutlich verbessert werden. Normalerweise werden Notebooks als JSON abgespeichert, da sie sowohl Eingaben wie auch die erzeugten Ausgaben erhalten. Jupytext trennt dies, da es Eingaben (hier in .Rmd) und Ausgaben (weiterhin in .ipynd)  verwaltet.
+
+Tutorial zur einfachen und korrekten Installation: [Installation — Jupytext  documentation](https://jupytext.readthedocs.io/en/latest/install.html)
+
 ## Anwendung
 ### ExternalTask
 
@@ -34,7 +40,7 @@ Der Beispiel-Prozess besteht aus einem Start- und End-Event, sowie einen Service
 
 Nachdem der Prozess deployed ist, kann er gestartet werden und über den LET wird die Verarbeitung angezeigt. In der Console des Workers wird die Ausgaben des aktuellen JSON ausgegeben:
 
-```
+```JSON
 {
   "correlationId": "e0c21d54-c9c1-41ee-b019-bf386762ab9d",
   "createdAt": "2019-07-29T15:25:23.606Z",
@@ -58,8 +64,16 @@ Nachdem der Prozess deployed ist, kann er gestartet werden und über den LET wir
 }
 ```
 
+### Ergebnis
+
+Wenn der Prozess erfolgreich durchgelaufen ist, dann kann man unter Jupyter-Notebook die Ausgabe *output_papermill.ipynb* angesehen werden.
+
+
+* *In [2] injected-parameters*: die einfügten Parameter aus dem Prozess
+* *In [3]*: Die Ausgabe … hier `a name from a process` 
+
 ## Weiterführende Links
-*  [https://papermill.readthedocs.io/en/latest/](https://papermill.readthedocs.io/en/latest/) 
+* [https://papermill.readthedocs.io/en/latest/](https://papermill.readthedocs.io/en/latest/) 
 * [ProcessEngine.io - Getting Started](https://www.process-engine.io/docs/getting-started/)
 
 #processengine/external_task# #technik/jupyter-notebook#
