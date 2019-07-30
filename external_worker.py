@@ -13,6 +13,16 @@ from external_task_api_client.external_task_worker import ExternalTaskWorker
 from external_task_api_client.external_task_finished import ExternalTaskFinished
 from external_task_api_client.external_task_bpmn_error import ExternalTaskBpmnError
 
+@asyncio.coroutine
+def _start_worker(worker, identity, topic, handle_action):
+    return worker.wait_for_handle(
+        identity=identity,
+        topic=topic,
+        max_tasks=10,
+        long_polling_timeout=10_000,
+        handle_action=handle_action
+    )
+
 async def _handle_work(task):
     try:
         print(json.dumps(task, sort_keys=True, indent=2))
@@ -35,17 +45,6 @@ async def _handle_work(task):
         print('Raised a exception: ', e)
         return ExternalTaskBpmnError(task["id"], "error_message", {'hello': 'world'})
 
-
-@asyncio.coroutine
-def _start_worker(worker, identity, topic, handle_action):
-    return worker.wait_for_handle(
-        identity=identity,
-        topic=topic,
-        max_tasks=10,
-        long_polling_timeout=10_000,
-        handle_action=handle_action
-    )
-
 def handle_external_task(process_engine_url, identity, topic, worker_func):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(None)
@@ -60,7 +59,6 @@ def handle_external_task(process_engine_url, identity, topic, worker_func):
     loop.run_until_complete(loop_runner)
 
 def main():
-
     process_engine_location = sys.argv[1] if len(sys.argv) == 2 else 'http://localhost:8000'
 
     identity = {"token": "ZHVtbXlfdG9rZW4="}
