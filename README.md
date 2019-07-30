@@ -58,6 +58,13 @@ Nachdem der Prozess deployed ist, kann er gestartet werden und über den LET wir
 }
 ```
 
+### Ergebnis
+
+Wenn der Prozess erfolgreich durchgelaufen ist, dann kann man unter Jupyter-Notebook die Ausgabe *output_papermill.ipynb* angesehen werden.
+
+* *In [2] injected-parameters*: die einfügten Parameter aus dem Prozess
+* *In [3]*: Die Ausgabe … hier `a name from a process` 
+
 ## Weiterführende Links
 *  [https://papermill.readthedocs.io/en/latest/](https://papermill.readthedocs.io/en/latest/) 
 * [ProcessEngine.io - Getting Started](https://www.process-engine.io/docs/getting-started/)
