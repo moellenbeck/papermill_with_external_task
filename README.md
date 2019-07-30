@@ -68,7 +68,6 @@ Nachdem der Prozess deployed ist, kann er gestartet werden und über den LET wir
 
 Wenn der Prozess erfolgreich durchgelaufen ist, dann kann man unter Jupyter-Notebook die Ausgabe *output_papermill.ipynb* angesehen werden.
 
-
 * *In [2] injected-parameters*: die einfügten Parameter aus dem Prozess
 * *In [3]*: Die Ausgabe … hier `a name from a process` 
 
