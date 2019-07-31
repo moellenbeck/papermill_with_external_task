@@ -10,8 +10,12 @@ import papermill as pm
 from external_task_api_client.external_task_api_client_service import ExternalTaskApiClientService
 from external_task_api_client.external_task_worker import ExternalTaskWorker
 
-from external_task_api_client.external_task_finished import ExternalTaskFinished
-from external_task_api_client.external_task_bpmn_error import ExternalTaskBpmnError
+from external_task_api_client.external_task_api_client_service import ExternalTaskApiClientService
+from external_task_api_client.external_task_worker import ExternalTaskWorker
+
+
+from external_task_api_client.external_task_results.finished import ExternalTaskFinished
+from external_task_api_client.external_task_results.bpmn_error import ExternalTaskBpmnError
 
 @asyncio.coroutine
 def _start_worker(worker, identity, topic, handle_action):
@@ -31,6 +35,7 @@ async def _handle_work(task):
         output_filename = 'output_papermill.ipynb'
 
         hello_param = task['payload']['a key']
+        #hello_param = task.payload['a key'] # with error
 
         pm.execute_notebook(
             input_filename,
