@@ -12,12 +12,10 @@ def _worker(payload):
     input_filename = 'input_papermill.ipynb'
     output_filename = 'output_papermill.ipynb'
 
-    hello_param = payload['a key']
-
     pm.execute_notebook(
         input_filename,
         output_filename,
-        parameters=dict(hello=hello_param)
+        parameters=payload
     )
 
     result = {"output_filename": output_filename}

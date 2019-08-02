@@ -1,0 +1,60 @@
+---
+jupyter:
+  jupytext:
+    formats: ipynb,Rmd
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.1'
+      jupytext_version: 1.2.1
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python tags=c("parameters")}
+year = '2020'
+```
+
+```{python}
+import datetime
+import json
+import requests
+import time
+import csv
+```
+
+```{python}
+def to_date(str_date):
+  the_date = datetime.datetime.strptime(str_date, "%Y-%m-%d")
+  return the_date.date()
+
+```
+
+```{python}
+url = "https://feiertage-api.de/api/?jahr={year}".format(year=year)
+federal_state = 'NW'
+```
+
+```{python}
+request_freedays = requests.get(url)
+
+str_data = request_freedays.content.decode("utf-8")
+freedays = json.loads(str_data)[federal_state]
+
+freeday_dict = {freeday:str(to_date(freedays[freeday]['datum'])) for freeday in freedays}
+
+print(freeday_dict)
+```
+
+```{python}
+filename = "freedays_{}.csv".format(year)
+
+with open(filename, mode='w') as freeday_file:
+    writer = csv.writer(freeday_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+    writer.writerow(['Name', 'Date'])
+    for freeday in freeday_dict.keys():
+        writer.writerow([freeday, freeday_dict[freeday]])
+```

@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  
+  process-engine:
+    image: 5minds/process_engine_runtime
+    networks:
+      - process-engine
+    ports:
+      - 8000:8000
+  
+  external-worker:
+    build:
+      context: ./external-worker
+      dockerfile: external-worker
+    depends_on:
+      - process-engine
+    networks:
+      - process-engine
+    volumes:
+      - notebooks:/notebooks
+
+  jupyter-notebook:
+    build:
+      context: ./jupyter-notebook
+      dockerfile: jupyter-notebook
+    networks:
+      - jupyter-notebook
+    ports:
+      - "8888:8888"
+
+networks: 
+  process-engine:
+  jupyter-notebook:
+
+volumes:
+  notebooks:

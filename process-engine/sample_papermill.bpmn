@@ -24,7 +24,7 @@
     <bpmn:serviceTask id="Task_1vjfxzy" name="test papermill" camunda:type="external" camunda:topic="PapermillTopic">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="payload" value="{&#10;  &#34;a key&#34;: &#34;hello this is a key from a process&#34;&#10;}" />
+          <camunda:property name="payload" value="{&#10;  &#34;year&#34;: &#34;2019&#34;&#10;}" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1jdocur</bpmn:incoming>
