@@ -1,0 +1,4 @@
+FROM jupyter/scipy-notebook
+
+LABEL maintainer="Martin.Moellenbeck@5Minds.de"
+

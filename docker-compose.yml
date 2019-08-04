@@ -7,23 +7,12 @@ services:
     networks:
       - process-engine
     ports:
-      - 8000:8000
-  
-  external-worker:
-    build:
-      context: ./external-worker
-      dockerfile: external-worker
-    depends_on:
-      - process-engine
-    networks:
-      - process-engine
-    volumes:
-      - notebooks:/notebooks
+      - 8001:8000
 
   jupyter-notebook:
     build:
       context: ./jupyter-notebook
-      dockerfile: jupyter-notebook
+      dockerfile: dockerfile-jupyter-notebook
     networks:
       - jupyter-notebook
     ports:
@@ -34,4 +23,4 @@ networks:
   jupyter-notebook:
 
 volumes:
-  notebooks:
+  notebooks: {}
