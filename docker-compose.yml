@@ -20,6 +20,16 @@ services:
     volumes:
       - notebooks:/home/jovyan/notebooks
 
+  external-worker:
+    build:
+      context: ./external-worker
+      dockerfile: dockerfile-external_worker
+    networks:
+      - process-engine
+      - jupyter-notebook
+    volumes:
+      - notebooks:/usr/src/app/notebooks
+
 networks: 
   process-engine:
   jupyter-notebook:
@@ -29,5 +39,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}
+      device: ${PWD}/external-worker/
       o: bind

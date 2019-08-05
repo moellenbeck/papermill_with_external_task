@@ -1,0 +1,11 @@
+FROM python
+
+LABEL maintainer="Martin.Moellenbeck@5Minds.de"
+
+WORKDIR /usr/src/app/notebooks
+
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "./external_worker.py", "http://process-engine:8000"]
+
