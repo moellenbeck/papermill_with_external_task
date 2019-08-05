@@ -1,3 +1,7 @@
 FROM jupyter/scipy-notebook
 
 LABEL maintainer="Martin.Moellenbeck@5Minds.de"
+
+RUN conda install --quiet --yes jupytext
+
+COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
