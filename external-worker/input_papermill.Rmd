@@ -38,6 +38,11 @@ federal_state = 'NW'
 ```
 
 ```{python}
+# placeholder
+print(xyz)
+```
+
+```{python}
 request_freedays = requests.get(url)
 
 str_data = request_freedays.content.decode("utf-8")
