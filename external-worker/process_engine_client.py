@@ -55,7 +55,7 @@ class ProcessEngineClient:
                 return ExternalTaskBpmnError(task_id, be.error_code, {'message': be.error_message})
             except Exception as e:
                 print('Unspecified exception raised: ', e)
-                return ExternalTaskBpmnError(task_id, "undefined", {'message': str(e)})
+                return ExternalTaskBpmnError(task_id, "GenericError", {'message': str(e)})
 
         return self._worker.wait_for_handle(
             identity=self._identity,

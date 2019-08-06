@@ -45,7 +45,7 @@
     </bpmn:task>
     <bpmn:sequenceFlow id="SequenceFlow_0vfs73v" name="" sourceRef="DoSomething" targetRef="EndEvent_16i3x5f" />
   </bpmn:process>
-  <bpmn:error id="Error_meYxBCVR" name="" errorCode="&#34;undefined&#34;" />
+  <bpmn:error id="Error_meYxBCVR" name="" errorCode="GenericError" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1cidyxu">
       <bpmndi:BPMNShape id="Participant_0px403d_di" bpmnElement="Participant_0px403d" isHorizontal="true">
