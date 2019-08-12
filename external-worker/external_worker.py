@@ -31,6 +31,8 @@ def main():
 
     process_engine_client = ProcessEngineClient(process_engine_location)
 
-    process_engine_client.subscribe_to_external_tasks_with_topic(topic, _worker)
+    process_engine_client.subscribe_to_external_task_for_topic(topic, _worker)
 
+    process_engine_client.start()
+    
 main()

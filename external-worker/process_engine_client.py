@@ -3,6 +3,7 @@
 
 import asyncio
 import json
+import signal
 
 from external_task_api_client.external_task_api_client_service import ExternalTaskApiClientService
 from external_task_api_client.external_task_worker import ExternalTaskWorker
@@ -34,8 +35,9 @@ class ProcessEngineClient:
 
         self._worker = ExternalTaskWorker(external_task_client)
 
-    @asyncio.coroutine
-    def _start_external_task(self, topic, handle_action, options={}):
+        self._tasks = []
+
+    async def _start_external_task(self, topic, handle_action, options={}):
         max_tasks = options.get('max_tasks', 10)
         long_polling_timeout = options.get('long_polling_timeout', 10_000)
         dump_task = options.get('dump_task', True)
@@ -57,7 +59,7 @@ class ProcessEngineClient:
                 print('Unspecified exception raised: ', e)
                 return ExternalTaskBpmnError(task_id, "GenericError", {'message': str(e)})
 
-        return self._worker.wait_for_handle(
+        return await self._worker.wait_for_handle(
             identity=self._identity,
             topic=topic,
             max_tasks=max_tasks,
@@ -65,7 +67,34 @@ class ProcessEngineClient:
             handle_action=wrapper_handle_action
         )
 
-    def subscribe_to_external_tasks_with_topic(self, topic, worker_func):
-        loop_runner = self._start_external_task(topic, worker_func)
+    def subscribe_to_external_task_for_topic(self, topic, worker_func):
+        task = self._start_external_task(topic, worker_func)
+        self._tasks.append(task)
 
-        self._loop.run_until_complete(loop_runner)
+    def _register_shutdown(self):
+        async def shutdown(signal, loop):
+            print(f"Received exit signal {signal.__name__}...")
+            tasks = [task for task in asyncio.all_tasks() if task is not asyncio.current_task()]
+
+            [task.cancel() for task in tasks]
+
+            await asyncio.gather(*tasks)
+            loop.stop()
+
+        signal_handler = lambda signal=signal: asyncio.create_task(shutdown(signal, self._loop))
+        signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT, signal.SIGQUIT)
+
+        for s in signals:
+            self._loop.add_signal_handler(s, signal_handler)
+
+
+    def start(self):
+        try:
+            for task in self._tasks:
+                self._loop.create_task(task)
+    
+            #self._register_shutdown()
+            self._loop.run_forever()
+        finally:
+            self._loop.close()
+            pass
