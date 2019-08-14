@@ -38,8 +38,8 @@ federal_state = 'NW'
 ```
 
 ```{python}
-# placeholder
-print(xyz)
+# placeholder for raise an error
+#print(xyz)
 ```
 
 ```{python}
