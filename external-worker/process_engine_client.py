@@ -66,19 +66,26 @@ class ProcessEngineClient:
             long_polling_timeout=long_polling_timeout,
             handle_action=wrapper_handle_action
         )
+    
+    def _create_task(self, topic, worker_func):
+        worker = self._start_external_task(topic, worker_func)
+        task = self._loop.create_task(worker)
+        self._tasks.append(task)
 
     def subscribe_to_external_task_for_topic(self, topic, worker_func):
-        task = self._start_external_task(topic, worker_func)
-        self._tasks.append(task)
+        self._create_task(topic, worker_func)
 
     def _register_shutdown(self):
         async def shutdown(signal, loop):
             print(f"Received exit signal {signal.__name__}...")
-            tasks = [task for task in asyncio.all_tasks() if task is not asyncio.current_task()]
 
-            [task.cancel() for task in tasks]
+            for task in self._tasks:
+                print(type(task))
+                try:
+                    task.cancel()
+                except Exception as e:
+                    print(e)
 
-            await asyncio.gather(*tasks)
             loop.stop()
 
         signal_handler = lambda signal=signal: asyncio.create_task(shutdown(signal, self._loop))
@@ -89,12 +96,9 @@ class ProcessEngineClient:
 
 
     def start(self):
-        try:
-            for task in self._tasks:
-                self._loop.create_task(task)
-    
-            #self._register_shutdown()
+        try:    
+            self._register_shutdown()
             self._loop.run_forever()
         finally:
-            self._loop.close()
+            #self._loop.close()
             pass
