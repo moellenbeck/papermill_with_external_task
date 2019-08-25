@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import asyncio
+import inspect
 import json
 import signal
 
@@ -42,6 +43,10 @@ class ProcessEngineClient:
         long_polling_timeout = options.get('long_polling_timeout', 10_000)
         dump_task = options.get('dump_task', True)
 
+        #TODO: try to handle meta-data of task not only the payload
+        #handle_action_spec = inspect.getfullargspec(handle_action)
+        arg_count = 1 #len(handle_action_spec.args)
+
         async def wrapper_handle_action(task):
             print(json.dumps(task, sort_keys=True, indent=2)) is dump_task
 
@@ -49,7 +54,12 @@ class ProcessEngineClient:
             task_id = task['id']
 
             try:
-                result = handle_action(payload)
+                result = None
+
+                if arg_count == 1:
+                    result = handle_action(payload)
+                else:
+                    result = handle_action(payload, task)
 
                 return ExternalTaskFinished(task_id, result)
             except BpmnError as be:
@@ -77,10 +87,9 @@ class ProcessEngineClient:
 
     def _register_shutdown(self):
         async def shutdown(signal, loop):
-            print(f"Received exit signal {signal.__name__}...")
+            print(f"Received exit signal {signal.__name__}...") #TODO: using logging instead of print
 
             for task in self._tasks:
-                print(type(task))
                 try:
                     task.cancel()
                 except Exception as e:
@@ -93,7 +102,6 @@ class ProcessEngineClient:
 
         for s in signals:
             self._loop.add_signal_handler(s, signal_handler)
-
 
     def start(self):
         try:    

@@ -23,6 +23,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="payload" value="{&#10;  &#34;year&#34;: &#34;2019&#34;&#10;}" />
+          <camunda:property name="filename" value="&#39;a_filename&#39;" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1jdocur</bpmn:incoming>
