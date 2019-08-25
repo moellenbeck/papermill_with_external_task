@@ -3,5 +3,7 @@ FROM jupyter/scipy-notebook
 LABEL maintainer="Martin.Moellenbeck@5Minds.de"
 
 RUN conda install --quiet --yes jupytext
+RUN conda install -c conda-forge jupyter_contrib_nbextensions
+RUN conda install -c conda-forge jupyter_nbextensions_configurator
 
 COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
