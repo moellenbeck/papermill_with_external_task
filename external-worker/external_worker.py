@@ -26,7 +26,13 @@ def _worker(payload):
     return result
 
 def main():
-    process_engine_location = sys.argv[1] if len(sys.argv) == 2 else 'http://localhost:8000'
+    process_engine_stable = 'http://localhost:56000'
+    process_engine_beta = 'http://localhost:56000'
+    process_engine_alpha = 'http://localhost:56000'
+
+    default_process_engine = process_engine_stable
+
+    process_engine_location = sys.argv[1] if len(sys.argv) == 2 else default_process_engine
     topic = 'PapermillTopic'
 
     process_engine_client = ProcessEngineClient(process_engine_location)
