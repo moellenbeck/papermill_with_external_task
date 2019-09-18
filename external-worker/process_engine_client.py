@@ -47,19 +47,26 @@ class ProcessEngineClient:
         #handle_action_spec = inspect.getfullargspec(handle_action)
         arg_count = 1 #len(handle_action_spec.args)
 
+        def handle_action_wrapper_one_parameter(payload, identity, task):
+            return handle_action(payload)
+
+        def handle_action_two_parameter(payload, identity, task):
+            return handle_action(payload, identity)
+
+        def handle_action_two_parameter(payload, identity, task):
+            return handle_action(payload, identity, task)
+
+        handle_action_wrapper = handle_action_wrapper_one_parameter
+
         async def wrapper_handle_action(task):
             print(json.dumps(task, sort_keys=True, indent=2)) is dump_task
 
             payload = task['payload']
+            identity = task['identity']
             task_id = task['id']
 
             try:
-                result = None
-
-                if arg_count == 1:
-                    result = handle_action(payload)
-                else:
-                    result = handle_action(payload, task)
+                result = handle_action_wrapper(payload, identity, task)
 
                 return ExternalTaskFinished(task_id, result)
             except BpmnError as be:
