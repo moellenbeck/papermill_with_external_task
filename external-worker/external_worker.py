@@ -9,7 +9,7 @@ from process_engine_client import ProcessEngineClient, BpmnError
 
 def _worker(payload):
 
-    input_filename = 'input_papermill.ipynb'
+    input_filename = 'input_papermill.ipynb' # flownode.bpmn_config.['input']
     output_filename = 'output_papermill.ipynb'
 
     pm.execute_notebook(
