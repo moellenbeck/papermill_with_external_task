@@ -46,7 +46,6 @@ Pygments==2.4.2
 pyrsistent==0.15.4
 python-dateutil==2.8.0
 PyYAML==5.1.1
-pyzmq==18.0.2
 qtconsole==4.5.2
 requests==2.22.0
 Send2Trash==1.5.0
